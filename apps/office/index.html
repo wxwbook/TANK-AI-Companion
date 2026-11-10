@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大肥鱼 AI Office</title>
+<style>
+:root{--bg:#0b1220;--bg2:#0f1b33;--panel:#121c30;--line:#22304d;--text:#e6edf7;--mute:#8fa1bf;--accent:#38bdf8;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--fish-body:#38bdf8;--fish-fin:#7dd3fc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}h1{font-size:16px;margin:0}
+.pill{padding:2px 10px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--mute);font-size:12px}
+main{display:grid;gap:12px;padding:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.wide{grid-column:1/-1}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}.card h2{font-size:13px;color:var(--mute);margin:0 0 8px;font-weight:600}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.kpi b{display:block;font-size:22px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--mute)}
+.working,.running,.awaiting_approval{background:var(--accent)}.idle,.done{background:var(--ok)}.error,.rejected{background:var(--bad)}.planned,.disabled{background:var(--line)}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok)}.bar.warn i{background:var(--warn)}.bar.critical i{background:var(--bad)}
+.sim{color:var(--mute);font-size:12px}.mute{color:var(--mute)}
+input,button,textarea,select{font:inherit;color:var(--text);background:#0e1729;border:1px solid var(--line);border-radius:8px;padding:7px 9px;max-width:100%}
+button{background:var(--accent);color:#04141f;border:0;font-weight:600;cursor:pointer}button.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}button.bad{background:var(--bad)}
+button+button{margin-left:6px}.pg{border-bottom:1px solid var(--line);padding:8px 0}.pg:last-child{border:0}.pg button{margin:4px 6px 0 0;padding:4px 10px}
+.perm{display:inline-block;margin:2px 4px 0 0;padding:1px 8px;border-radius:99px;border:1px solid var(--line);font-size:12px}.perm.on{border-color:var(--ok);color:var(--ok)}
+#chatlog{max-height:220px;overflow:auto;white-space:pre-wrap;margin-bottom:8px}.u{color:var(--accent)}
+.center{text-align:center}.isowrap{height:230px;display:flex;align-items:center;justify-content:center;overflow:hidden;perspective:900px}
+.iso{display:grid;grid-template-columns:repeat(4,64px);gap:16px;transform:rotateX(58deg) rotateZ(-45deg);transform-style:preserve-3d}
+.desk{width:64px;height:64px;background:var(--bg2);border:2px solid var(--line);box-shadow:5px 5px 0 var(--line);position:relative}
+.desk.s-working{border-color:var(--accent);box-shadow:5px 5px 0 var(--accent)}.desk.s-planned,.desk.s-disabled{opacity:.45}
+.desk .bot{position:absolute;left:50%;top:50%;font-size:26px;transform:translate(-50%,-60%) rotateZ(45deg) rotateX(-58deg);transform-origin:center}
+.desk .nm{position:absolute;left:50%;bottom:-26px;font-size:11px;white-space:nowrap;color:var(--text);transform:translateX(-50%) rotateZ(45deg) rotateX(-58deg)}
+#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;transition:opacity .6s}#splash.hide{opacity:0;pointer-events:none}
+#login{max-width:360px;margin:15vh auto;display:grid;gap:8px;padding:16px}
+#pet{position:fixed;right:14px;bottom:14px;z-index:20;cursor:pointer;filter:drop-shadow(0 4px 8px rgba(0,0,0,.35))}
+</style>
+</head>
+<body>
+<div id="splash"><div id="splashFish"></div><div style="margin-top:8px">大肥鱼 AI Office</div></div>
+<div id="login" class="card"><h2>登录（Owner 令牌）</h2><input id="tok" type="password" placeholder="OWNER_API_TOKEN"><button id="go">进入</button><div id="err" class="sim"></div></div>
+<div id="app" hidden>
+<header><h1>🐟 大肥鱼 AI Office</h1><span class="pill" id="st">状态</span><span class="pill" id="hm">模型</span>
+<span style="flex:1"></span><select id="themeSel" aria-label="主题"></select></header>
+<main>
+ <section class="card center"><h2>角色</h2><div id="fish"></div><div id="fishState" class="sim"></div></section>
+ <section class="card"><h2>办公室</h2><div class="isowrap"><div class="iso" id="iso"></div></div></section>
+ <section class="card"><h2>团队 KPI</h2><div class="kpi"><div><b id="k1">0</b>任务</div><div><b id="k2">0</b>进行中</div><div><b id="k3">0</b>完成</div><div><b id="k4">0</b>异常</div></div></section>
+ <section class="card"><h2>AI 团队（内置 Agent）</h2><div id="agents"></div></section>
+ <section class="card"><h2>任务中心</h2><div id="tasks"></div></section>
+ <section class="card wide" id="taskDetailCard" hidden><h2>任务过程</h2><div id="taskDetail"></div></section>
+ <section class="card"><h2>审批中心</h2><div id="appr"></div>
+   <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><select id="opAct"><option value="restart">重启</option><option value="start">启动</option><option value="stop">停止</option></select><input id="opTarget" placeholder="容器名（须在白名单）" style="flex:1;min-width:120px"><button id="opGo">申请</button></div></section>
+ <section class="card"><h2>上下文用量</h2><div class="bar" id="bar"><i style="width:0"></i></div><div id="ctx" class="mute" style="margin-top:6px"></div><button id="cmp" style="margin-top:8px">压缩上下文</button></section>
+ <section class="card"><h2>集成状态</h2><div id="integ" class="mute">加载中…</div></section>
+ <section class="card"><h2>NAS 状态（只读）</h2><pre id="nas" style="margin:0;white-space:pre-wrap;max-height:200px;overflow:auto">加载中…</pre></section>
+ <section class="card wide"><h2>插件中心 Plugin Hub</h2><div id="plugins"></div><div id="pcards" style="display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:8px"></div></section>
+ <section class="card wide"><h2>创造工坊</h2><div style="display:flex;gap:6px;flex-wrap:wrap"><input id="wsReq" style="flex:1;min-width:200px" placeholder="描述想要的插件，如：NAS 状态卡片 / NAS 巡检 / 上下文用量卡片"><button id="wsGo">生成草稿</button></div><div id="drafts" style="margin-top:8px"></div></section>
+ <section class="card wide"><h2>人格工坊</h2><div id="personas"></div><textarea id="pCard" rows="3" style="width:100%;margin-top:8px" placeholder='导入人格卡：JSON（name/core/tone/address/rules/scenes）或一段纯文本'></textarea><button id="pImp">导入为草稿版本</button></section>
+ <section class="card"><h2>我的记忆</h2><div id="mems"></div><div style="display:flex;gap:6px;margin-top:6px"><input id="memNew" style="flex:1" placeholder="告诉我要记住的事"><button id="memAdd">记住</button></div></section>
+ <section class="card"><h2>我的日记</h2><div id="diary"></div><div style="display:flex;gap:6px;margin-top:6px"><input id="diaryNew" style="flex:1" placeholder="写一条日记"><button id="diaryAdd">保存</button></div></section>
+ <section class="card"><h2>语音中心</h2><div id="voice" class="mute"></div></section>
+ <section class="card"><h2>外观</h2><div style="margin-bottom:6px">形象：<select id="formSel"><option value="chibi">Q 版</option><option value="original">原版</option></select> <span class="sim">同一个大肥鱼的两种样子</span></div><label><input type="checkbox" id="pAnim"> 动画</label> <label><input type="checkbox" id="pSplash"> 启动动画</label> <label><input type="checkbox" id="pPet"> 桌面宠物</label></section>
+ <section class="card wide"><h2>和大肥鱼聊聊</h2><div id="chatlog"></div><div style="display:flex;gap:8px"><input id="msg" style="flex:1" placeholder="说点什么…（试试：NAS 状态怎么样 / 重启 emby / 记住 我喜欢茶）"><button id="send">发送</button></div></section>
+</main><div id="pet" title="点我聊天"></div></div>
+<script src="/shared/fish.js"></script>
+<script src="app.js"></script>
+</body></html>

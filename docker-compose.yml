@@ -1,0 +1,18 @@
+# Unraid 上可直接用 Compose Manager，或按此参数在模板中填写。
+# 安全底线：不挂载 docker.sock、不使用 privileged、不开放 Hermes 管理端口。
+services:
+  tank-ai-companion:
+    build: .
+    container_name: tank-ai-companion
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+    volumes:
+      - /mnt/user/appdata/tank-ai-companion/data:/data
+    ports:
+      - "127.0.0.1:8787:8787"   # 仅本机；公网访问请走 Nginx Proxy Manager + HTTPS
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]

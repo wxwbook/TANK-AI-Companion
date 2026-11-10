@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>大肥鱼</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="/shared/fish.js"></script>
+<style>
+:root{--bg2:#0f1b33;--fish-body:#38bdf8;--fish-fin:#7dd3fc;--bg:var(--tg-theme-bg-color,#0b1220);--text:var(--tg-theme-text-color,#e6edf7);--mute:var(--tg-theme-hint-color,#8fa1bf);--btn:var(--tg-theme-button-color,#38bdf8);--card:var(--tg-theme-secondary-bg-color,#121c30)}
+*{box-sizing:border-box}body{margin:0;padding:12px;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"PingFang SC",sans-serif}
+.card{background:var(--card);border-radius:12px;padding:12px;margin-bottom:10px}h2{font-size:13px;margin:0 0 6px;color:var(--mute)}
+.row{display:flex;justify-content:space-between;gap:8px;padding:5px 0}.fish{font-size:48px;text-align:center}
+input,button{font:inherit;border-radius:8px;border:1px solid #2a3a5c;background:transparent;color:var(--text);padding:8px}button{background:var(--btn);border:0;color:#fff}
+.sim{color:var(--mute);font-size:12px}
+</style>
+</head>
+<body>
+<div class="card"><div class="fish" id="fish">🐟</div><div class="sim" style="text-align:center" id="st">连接中…</div></div>
+<div class="card"><h2>任务</h2><div id="tasks"></div></div>
+<div class="card"><h2>Agent</h2><div id="agents"></div></div>
+<div class="card"><h2>记忆</h2><div id="mem"></div><div style="display:flex;gap:6px;margin-top:6px"><input id="m" style="flex:1" placeholder="告诉我要记住的事"><button id="add">记住</button></div></div>
+<div class="card"><h2>日记</h2><div id="diary"></div><div style="display:flex;gap:6px;margin-top:6px"><input id="d" style="flex:1" placeholder="写一条日记"><button id="dadd">保存</button></div></div>
+<div class="card"><h2>聊天</h2><div id="chatlog" style="white-space:pre-wrap;max-height:200px;overflow:auto;margin-bottom:6px"></div><div style="display:flex;gap:6px"><input id="msg" style="flex:1" placeholder="说点什么…"><button id="send">发送</button></div></div>
+<div class="card"><h2>上下文</h2><div id="ctx"></div></div>
+<script src="app.js"></script>
+</body></html>

@@ -1,0 +1,17 @@
+{
+  "id": "unraid-ops",
+  "name": "Unraid 运维（需审批）",
+  "version": "1.0.0",
+  "type": "tool",
+  "author": "TANK",
+  "source": "builtin",
+  "description": "重启/启动/停止白名单内的容器。调用只会生成审批申请，Owner 批准后才执行，并记录审计与回滚信息。",
+  "level": 3,
+  "requires": ["unraid"],
+  "permissions": ["docker:update"],
+  "tools": [
+    { "name": "docker.restart", "level": 3, "permission": "docker:update", "description": "申请重启容器" },
+    { "name": "docker.start", "level": 3, "permission": "docker:update", "description": "申请启动容器" },
+    { "name": "docker.stop", "level": 3, "permission": "docker:update", "description": "申请停止容器（回滚=启动）" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "unraid",
+  "name": "Unraid 管家（只读）",
+  "version": "1.0.0",
+  "type": "tool",
+  "author": "TANK",
+  "source": "builtin",
+  "description": "通过 UnraidClaw 只读查询 Unraid 状态、容器、阵列和磁盘。建议为其创建 Read Only 预设的专用密钥。",
+  "level": 2,
+  "permissions": ["info:read", "docker:read", "array:read", "disk:read"],
+  "tools": [
+    { "name": "status", "level": 2, "permission": "info:read", "description": "聚合状态（健康/系统/容器/阵列）" },
+    { "name": "docker.list", "level": 2, "permission": "docker:read", "description": "容器列表与状态" },
+    { "name": "array.status", "level": 2, "permission": "array:read", "description": "阵列状态" },
+    { "name": "disks.list", "level": 2, "permission": "disk:read", "description": "磁盘列表" }
+  ]
+}

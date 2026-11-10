@@ -1,0 +1,3 @@
+{ "id": "sakura", "name": "樱花 Q 版", "background": "gradient",
+  "vars": { "--bg": "#1d1222", "--bg2": "#2b1a33", "--panel": "#2a1a33", "--line": "#4a2f57", "--text": "#fbe8f3", "--mute": "#c7a3bd",
+    "--accent": "#f472b6", "--ok": "#86efac", "--warn": "#fcd34d", "--bad": "#fda4af", "--fish-body": "#f9a8d4", "--fish-fin": "#fbcfe8" } }

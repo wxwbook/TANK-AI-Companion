@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>大肥鱼桌面宠物</title>
+<style>html,body{margin:0;background:transparent;overflow:hidden}body{display:flex;align-items:center;justify-content:center;height:100vh;--fish-body:#38bdf8;--fish-fin:#7dd3fc;--bg:#0b1220;--bg2:#0f1b33}#f{cursor:grab}</style></head>
+<body><div id="f"></div><script src="/shared/fish.js"></script>
+<script>
+// 独立宠物页：可作为后续 Electron/Tauri 桌面端的透明窗口内容。只读取角色状态，不执行任何操作。
+const token = sessionStorage.getItem('tank_token') || new URLSearchParams(location.hash.slice(1)).get('t') || '';
+async function tick(){ let s='idle'; try{ const r=await fetch('/api/state',{headers:{authorization:'Bearer '+token}}); if(r.ok) s=(await r.json()).state; }catch{} document.body.classList.add('tank-anim'); document.getElementById('f').innerHTML=renderFish(s,140); }
+tick(); setInterval(tick,3000);
+</script></body></html>

@@ -1,0 +1,14 @@
+{
+  "id": "session-stats",
+  "name": "会话统计",
+  "version": "1.0.0",
+  "type": "tool",
+  "author": "TANK",
+  "source": "builtin",
+  "description": "查看当前用户的上下文用量与消息数量（仅读取自己的会话）。",
+  "level": 1,
+  "permissions": ["user:session"],
+  "tools": [
+    { "name": "usage", "level": 1, "permission": "user:session", "description": "上下文用量（标注实测/估算）" }
+  ]
+}
