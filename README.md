@@ -35,7 +35,7 @@ docker compose up -d
 
 **方式二：Unraid 模板**
 
-模板文件：`unraid/tank-ai-companion.xml`，在 Unraid `Docker → Add Container` 里粘贴模板 URL：
+`unraid/tank-ai-companion.xml`，在 Unraid `Docker → Add Container` 里粘贴模板 URL：
 
 ```
 https://raw.githubusercontent.com/wxwbook/TANK-AI-Companion/main/unraid/tank-ai-companion.xml
@@ -53,8 +53,8 @@ docker run -d --name Tank-AI-Companion --restart unless-stopped \
 ```
 
 - 打开 `http://NAS地址:8787/office/`，用 `OWNER_API_TOKEN` 登录
-- 要接 Telegram：再补 `TELEGRAM_BOT_TOKEN`、`MINIAPP_URL`（必须公网 HTTPS）
-- 国内拉不到 Docker Hub 时，基础镜像会走 `docker.m.daocloud.io`；访问 Telegram 需要 `HTTPS_PROXY` + `NODE_USE_ENV_PROXY=1`
+- 接 Telegram 需再补 `TELEGRAM_BOT_TOKEN`、`MINIAPP_URL`（必须公网 HTTPS）
+- 国内拉不到 Docker Hub 时基础镜像走 `docker.m.daocloud.io`；访问 Telegram 需 `HTTPS_PROXY` + `NODE_USE_ENV_PROXY=1`
 
 ## 自动构建
 
