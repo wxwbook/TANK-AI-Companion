@@ -4,6 +4,8 @@ COPY package.json ./
 COPY apps ./apps
 COPY packages ./packages
 COPY roles ./roles
+COPY themes ./themes
+COPY plugins ./plugins
 # 非 root 运行；数据目录由卷挂载
 RUN mkdir -p /data && chown -R node:node /app /data
 USER node
