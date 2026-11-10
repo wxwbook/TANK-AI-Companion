@@ -1,5 +1,8 @@
 FROM node:22-alpine
 WORKDIR /app
+LABEL org.opencontainers.image.source="https://github.com/wxwbook/TANK-AI-Companion"
+LABEL org.opencontainers.image.description="TANK-AI-Companion: 大肥鱼 AI 个人操作系统（Web Office + Telegram Mini App + Bot）"
+LABEL org.opencontainers.image.licenses="UNLICENSED"
 COPY package.json ./
 COPY apps ./apps
 COPY packages ./packages
