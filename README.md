@@ -18,6 +18,48 @@ npm start                 # API + Web Office + Bot（配置了 TELEGRAM_BOT_TOKE
 ## 部署（Unraid）
 见 `docker-compose.yml`：不挂 docker.sock、不 privileged、只读根文件系统、仅监听本机，经 NPM 反代 HTTPS。
 
+## Docker 部署（镜像已发布）
+
+```bash
+docker pull ghcr.io/wxwbook/tank-ai-companion:latest
+```
+
+**方式一：Docker Compose（Unraid Compose Manager 亦可）**
+
+```bash
+git clone https://github.com/wxwbook/TANK-AI-Companion.git
+cd TANK-AI-Companion
+cp .env.example .env      # 填 OWNER_TELEGRAM_ID、OWNER_API_TOKEN 等
+docker compose up -d
+```
+
+**方式二：Unraid 模板**
+
+模板文件：`unraid/tank-ai-companion.xml`，在 Unraid `Docker → Add Container` 里粘贴模板 URL：
+
+```
+https://raw.githubusercontent.com/wxwbook/TANK-AI-Companion/main/unraid/tank-ai-companion.xml
+```
+
+**方式三：一条 docker run**
+
+```bash
+docker run -d --name Tank-AI-Companion --restart unless-stopped \
+  -p 8787:8787 \
+  -v /mnt/user/appdata/tank-ai-companion/data:/data \
+  -e OWNER_TELEGRAM_ID=你的TG数字ID \
+  -e OWNER_API_TOKEN=$(openssl rand -hex 16) \
+  ghcr.io/wxwbook/tank-ai-companion:latest
+```
+
+- 打开 `http://NAS地址:8787/office/`，用 `OWNER_API_TOKEN` 登录
+- 要接 Telegram：再补 `TELEGRAM_BOT_TOKEN`、`MINIAPP_URL`（必须公网 HTTPS）
+- 国内拉不到 Docker Hub 时，基础镜像会走 `docker.m.daocloud.io`；访问 Telegram 需要 `HTTPS_PROXY` + `NODE_USE_ENV_PROXY=1`
+
+## 自动构建
+
+`.github/workflows/docker-publish.yml`：推送 `main` 或打 `v*` 标签时，GitHub Actions 自动构建并推送 `ghcr.io/wxwbook/tank-ai-companion`。
+
 ## 功能一览
 - **内置 Agent 团队**：总经理 / NAS 管家 / 记忆管理员 / 研究员 / 创意设计师（媒体、网络管家标注“未接入”）
 - **审批式运维**：重启/启动/停止白名单容器，Owner 审批、一次性、可审计（默认关闭）

@@ -1,18 +1,25 @@
-# Unraid 上可直接用 Compose Manager，或按此参数在模板中填写。
-# 安全底线：不挂载 docker.sock、不使用 privileged、不开放 Hermes 管理端口。
+# TANK-AI-Companion（大肥鱼）— Unraid Compose Manager / 任意 Docker Compose 可直接用
+# 镜像已发布：ghcr.io/wxwbook/tank-ai-companion:latest
+# 想自己构建：把 image 换成 build: .
 services:
   tank-ai-companion:
-    build: .
-    container_name: tank-ai-companion
+    image: ghcr.io/wxwbook/tank-ai-companion:latest
+    container_name: Tank-AI-Companion
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - .env
     environment:
+      PORT: "8787"
+      HOST: "0.0.0.0"
       DATA_DIR: /data
+    ports:
+      - "8787:8787"          # 局域网访问；公网请走 Cloudflare Tunnel / NPM + HTTPS
     volumes:
       - /mnt/user/appdata/tank-ai-companion/data:/data
-    ports:
-      - "127.0.0.1:8787:8787"   # 仅本机；公网访问请走 Nginx Proxy Manager + HTTPS
-    read_only: true
-    tmpfs: [/tmp]
-    cap_drop: [ALL]
-    security_opt: ["no-new-privileges:true"]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8787/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

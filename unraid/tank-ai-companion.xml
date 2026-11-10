@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Tank-AI-Companion</Name>
+  <Repository>ghcr.io/wxwbook/tank-ai-companion:latest</Repository>
+  <Registry>https://github.com/wxwbook/TANK-AI-Companion/pkgs/container/tank-ai-companion</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/wxwbook/TANK-AI-Companion/issues</Support>
+  <Project>https://github.com/wxwbook/TANK-AI-Companion</Project>
+  <Overview>大肥鱼 AI 个人操作系统（TANK-AI-Companion）。零依赖 Node 服务：Web Office + Telegram Mini App + Bot，可对接 Hermes Agent 与本机 UnraidClaw。默认只读运维，写操作需 Owner 审批。</Overview>
+  <Category>Tools: Productivity: Network:Web</Category>
+  <WebUI>http://[IP]:[PORT:8787]/office/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/wxwbook/TANK-AI-Companion/main/unraid/tank-ai-companion.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/wxwbook/TANK-AI-Companion/main/icon-128.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Description>大肥鱼 AI 个人操作系统（TANK-AI-Companion）</Description>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8787</HostPort>
+        <ContainerPort>8787</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/tank-ai-companion/data</HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>8787</Value>
+      <Name>PORT</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>0.0.0.0</Value>
+      <Name>HOST</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>/data</Value>
+      <Name>DATA_DIR</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>OWNER_TELEGRAM_ID</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>OWNER_API_TOKEN</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>TELEGRAM_BOT_TOKEN</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>MINIAPP_URL</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>http://192.168.1.100:8642/v1</Value>
+      <Name>HERMES_BASE_URL</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>HERMES_API_KEY</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>hermes-agent</Value>
+      <Name>HERMES_MODEL</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>https://192.168.1.100:9876</Value>
+      <Name>UNRAID_API_URL</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>UNRAID_API_KEY</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>false</Value>
+      <Name>UNRAID_TLS_INSECURE</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>false</Value>
+      <Name>UNRAID_WRITE_ENABLED</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>UNRAID_WRITE_API_KEY</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>UNRAID_WRITE_ALLOWLIST</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>HTTPS_PROXY</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value></Value>
+      <Name>NODE_USE_ENV_PROXY</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Config Name="WebUI Port" Target="8787" Default="8787" Mode="tcp" Description="Web Office / Mini App / API 端口" Type="Port" Display="always" Required="true" Mask="false">8787</Config>
+  <Config Name="数据目录" Target="/data" Default="/mnt/user/appdata/tank-ai-companion/data" Mode="rw" Description="记忆、日记、任务、生成插件等持久化数据" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/tank-ai-companion/data</Config>
+  <Config Name="所有者 Telegram ID" Target="OWNER_TELEGRAM_ID" Default="" Mode="" Description="你的 Telegram 数字 ID" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="所有者 API 令牌" Target="OWNER_API_TOKEN" Default="" Mode="" Description="Web Office 登录令牌，越长越好（openssl rand -hex 16）" Type="Variable" Display="always" Required="true" Mask="true"></Config>
+  <Config Name="Telegram Bot Token" Target="TELEGRAM_BOT_TOKEN" Default="" Mode="" Description="BotFather 申请的机器人令牌，留空则不启动 Bot" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="Mini App 地址" Target="MINIAPP_URL" Default="" Mode="" Description="必须是公网 HTTPS，例如 https://tank.example.com" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="Hermes API 地址" Target="HERMES_BASE_URL" Default="http://192.168.1.100:8642/v1" Mode="" Description="Hermes API Server，带 /v1" Type="Variable" Display="always" Required="false" Mask="false">http://192.168.1.100:8642/v1</Config>
+  <Config Name="Hermes API Key" Target="HERMES_API_KEY" Default="" Mode="" Description="Hermes 的 API_SERVER_KEY" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="Hermes 模型" Target="HERMES_MODEL" Default="hermes-agent" Mode="" Description="默认模型名" Type="Variable" Display="advanced" Required="false" Mask="false">hermes-agent</Config>
+  <Config Name="UnraidClaw 地址" Target="UNRAID_API_URL" Default="https://192.168.1.100:9876" Mode="" Description="只读查询用，留空则显示模拟数据" Type="Variable" Display="always" Required="false" Mask="false">https://192.168.1.100:9876</Config>
+  <Config Name="UnraidClaw Key" Target="UNRAID_API_KEY" Default="" Mode="" Description="权限预设选 Read Only 的专用密钥" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="跳过证书校验" Target="UNRAID_TLS_INSECURE" Default="false" Mode="" Description="自签证书且未固定证书时才开 true" Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+  <Config Name="启用写操作审批" Target="UNRAID_WRITE_ENABLED" Default="false" Mode="" Description="开启后才能重启/启停白名单容器，每次需 Owner 审批" Type="Variable" Display="always" Required="false" Mask="false">false</Config>
+  <Config Name="写操作 Key" Target="UNRAID_WRITE_API_KEY" Default="" Mode="" Description="仅含 docker 写权限的独立密钥" Type="Variable" Display="advanced" Required="false" Mask="true"></Config>
+  <Config Name="白名单容器" Target="UNRAID_WRITE_ALLOWLIST" Default="" Mode="" Description="逗号分隔，例如 moviepilot,emby" Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="HTTPS 代理" Target="HTTPS_PROXY" Default="" Mode="" Description="访问 api.telegram.org 需要代理时填写，例如 http://192.168.1.2:7890" Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="启用 Node 代理支持" Target="NODE_USE_ENV_PROXY" Default="" Mode="" Description="Node 24 内置；填 1 时上面的 HTTPS_PROXY 才生效" Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+</Container>
